@@ -1,5 +1,6 @@
 {% extends "blog/base.html" %}
 {% block content %}
+
     {% for post in posts %}
         <article class="media content-section">
           <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
@@ -28,10 +29,30 @@
         {% endif %}
       {% endfor %}
 
-      {% if page_obj.has_next %}
-        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-      {% endif %}
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
 
     {% endif %}
+
 {% endblock content %}
+{% block sidebar %}
+    <div class="col-md-5">
+        <div class="content-section">
+            <div style="text-align: center;"><h3>Watch Live!</h3></div>
+            <script src="https://player.twitch.tv/js/embed/v1.js"></script>
+            <div id="<player div ID>"></div>
+            <script type="text/javascript">
+                var options = {
+                    width: 400,
+                    height: 300,
+                    channel: "itsmethewonk",
+                };
+                var player = new Twitch.Player("<player div ID>", options);
+                player.setVolume(0.5);
+            </script>
+            </p>
+        </div>
+    </div>
+{% endblock sidebar %}
