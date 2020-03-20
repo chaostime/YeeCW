@@ -1,18 +1,40 @@
 {% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
     <article class="media content-section">
-      <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
-      <div class="media-body">
-        <div class="article-metadata">
-          <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ object.author }}</a>
-          <small class="text-muted">{{ object.date_posted }}</small>
-          {% if object.author == user %}
-          <a class="btn btn-sm btn-secondary mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
-          <a class="btn btn-sm btn-danger mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
-          {% endif %}
+        <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ object.author }}</a>
+                <small class="text-muted">{{ object.date_posted }}</small>
+                {% if object.author == user %}
+                    <a class="btn btn-sm btn-secondary mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
+                    <a class="btn btn-sm btn-danger mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
+                {% endif %}
+            </div>
+            <h2 class="article-title">{{ object.title }}</h2>
+            <p class="article-content">{{ object.content }}</p>
         </div>
-        <h2 class="article-title">{{ object.title }}</h2>
-        <p class="article-content">{{ object.content }}</p>
-      </div>
     </article>
+    {% for comment in object.comments.all %}
+        <article class="card ">
+            <div class="card-header">
+                <blockquote class="blockquote mb-0">
+                    <p>{{ comment.content }}</p>
+                    <footer class="blockquote-footer">By {{ comment.author }} on <cite
+                            title="Source Title">{{ comment.date_posted }}</cite>
+                    </footer>
+                </blockquote>
+            </div>
+            <p class="card-text"></p>
+        </article>
+        <p></p>
+    {% endfor %}
+    <h1>Leave a Comment</h1>
+    <form method="post" style="margin-top: 1.3em;">
+        {{ comment_form.as_p }}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
+    </form>
+
 {% endblock content %}
