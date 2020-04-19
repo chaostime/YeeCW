@@ -1,5 +1,6 @@
 /.idea/
 /venv/
+__pycache__/
 yeecw/__pycache__/
 yeecw/yeecw/__pycache__/
 yeecw/users/__pycache__/
