@@ -1,2 +1,15 @@
 /.idea/
 /venv/
+yeecw/__pycache__/
+yeecw/yeecw/__pycache__/
+yeecw/users/__pycache__/
+yeecw/blog/__pycache__/__init__.cpython-38.pyc
+yeecw/blog/__pycache__/admin.cpython-38.pyc
+yeecw/blog/__pycache__/apps.cpython-38.pyc
+yeecw/blog/__pycache__/forms.cpython-38.pyc
+yeecw/blog/__pycache__/models.cpython-38.pyc
+yeecw/blog/__pycache__/urls.cpython-38.pyc
+yeecw/blog/__pycache__/views.cpython-38.pyc
+yeecw/blog/migrations/__pycache__/
+yeecw/blog/templatetags/__pycache__/
+yeecw/users/migrations/__pycache__/
