@@ -3,8 +3,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from .models import Post, Comment
 from .forms import CommentForm
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.http import HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
 
 
 def home(request):
@@ -34,14 +35,46 @@ class UserPostListView(ListView):
         return Post.objects.filter(author=user).order_by('-date_posted')
 
 
-class PostDetailView(DetailView):
-    model = Post
+def post_detail(request, pk):
+    template_name = 'blog/post_detail.html'
+    post = get_object_or_404(Post, pk=pk)
+    comments = post.comments.filter(post_id=pk)
+    new_comment = None
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = post
+            new_comment.author = request.user
+            new_comment.save()
+        return HttpResponseRedirect(reverse('blog:comment-posted'))
+
+    else:
+        comment_form = CommentForm(initial={
+            'author_id': request.user,
+            'post': pk
+        })
+
+    context = {
+        'post': post,
+        'comments': comments,
+        'comment_form': comment_form
+    }
+
+    return render(request, template_name, context)
+
+
+def commented(request):
+    return render(request, 'blog/comment_posted.html')
 
 
 class PostCreateView(UserPassesTestMixin, CreateView):
     model = Post
     fields = ['title', 'content']
     group_required = u"Blog Authors"
+
+    def get_success_url(self):
+        return reverse_lazy('blog:post-detail', kwargs={'pk': self.object.pk})
 
     def test_func(self):
         return self.request.user.groups.filter(name="Blog Authors").exists()
@@ -85,4 +118,3 @@ class CommentCreate(LoginRequiredMixin, CreateView):
 
 def about(request):
     return render(request, 'blog/about.html')
-# Create your views here.
