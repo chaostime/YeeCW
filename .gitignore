@@ -8,3 +8,6 @@ yeecw/blog/__pycache__/
 yeecw/blog/migrations/__pycache__/
 yeecw/blog/templatetags/__pycache__/
 yeecw/users/migrations/__pycache__/
+db.sqlite3
+.vscode/
+*.pyc

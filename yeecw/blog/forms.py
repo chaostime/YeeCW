@@ -1,8 +1,8 @@
-from .models import Comment
-from django import forms
+from . import models
+from django.forms import ModelForm
 
 
-class CommentForm(forms.ModelForm):
+class CommentForm(ModelForm):
     class Meta:
-        model = Comment
-        fields = ('content',)
+        model = models.Comment
+        fields = ['content']

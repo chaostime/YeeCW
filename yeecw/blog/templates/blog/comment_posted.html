@@ -1,0 +1,6 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    <h1>Comment posted!</h1>
+    <p>Return to the <a href="{{ request.META.HTTP_REFERER }}">blog post</a></p>
+    <p>Return <a href="{% url 'blog:blog-home' %}">home</a></p>
+{% endblock content %}

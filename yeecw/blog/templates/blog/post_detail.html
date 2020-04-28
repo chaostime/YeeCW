@@ -2,21 +2,21 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <article class="media content-section">
-        <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
+        <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
         <div class="media-body">
             <div class="article-metadata">
-                <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ object.author }}</a>
-                <small class="text-muted">{{ object.date_posted }}</small>
+                <a class="mr-2" href="{% url 'blog:user-posts' post.author.username %}">{{ post.author }}</a>
+                <small class="text-muted">{{ post.date_posted }}</small>
                 {% if object.author == user %}
-                    <a class="btn btn-sm btn-secondary mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
-                    <a class="btn btn-sm btn-danger mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
+                    <a class="btn btn-sm btn-secondary mt-1 mb-1" href="{% url 'blog:post-update' post.id %}">Update</a>
+                    <a class="btn btn-sm btn-danger mt-1 mb-1" href="{% url 'blog:post-delete' post.id %}">Delete</a>
                 {% endif %}
             </div>
-            <h2 class="article-title">{{ object.title }}</h2>
-            <p class="article-content">{{ object.content }}</p>
+            <h2 class="article-title">{{ post.title }}</h2>
+            <p class="article-content">{{ post.content }}</p>
         </div>
     </article>
-    {% for comment in object.comments.all %}
+    {% for comment in post.comments.all %}
         <article class="card ">
             <div class="card-header">
                 <blockquote class="blockquote mb-0">
@@ -30,11 +30,17 @@
         </article>
         <p></p>
     {% endfor %}
-    <h1>Leave a Comment</h1>
+
+    {% if error_message %}<p>{{ error_message }}</p>{% endif %}
+
+    {% if user.is_authenticated %}
+    <h1>Leave a comment!</h1>
     <form method="post" style="margin-top: 1.3em;">
-        {{ comment_form.as_p }}
+        {{ comment_form|crispy }}
         {% csrf_token %}
         <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
     </form>
-
+    {% else %}
+        <p>Please login to leave a comment</p>
+    {% endif %}
 {% endblock content %}
